@@ -49,6 +49,16 @@ public class SysRoleController {
         IPage<SysRole> pageInfo = sysRoleService.getPageCondition(pageParam, sysRoleQueryVo);
         return R.ok().data("pageInfo", pageInfo);
     }
+
+    /**
+     * 添加角色
+     */
+    @ApiOperation("添加角色")
+    @PostMapping
+    public R addRole(@RequestBody SysRole sysRole) {
+        boolean result = sysRoleService.save(sysRole);
+        return result ? R.ok() : R.error();
+    }
 }
 
 
