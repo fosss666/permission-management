@@ -59,6 +59,26 @@ public class SysRoleController {
         boolean result = sysRoleService.save(sysRole);
         return result ? R.ok() : R.error();
     }
+
+    /**
+     * 根据id查询角色
+     */
+    @ApiOperation("根据id查询")
+    @GetMapping("{id}")
+    public R getById(@PathVariable String id) {
+        SysRole sysRole = sysRoleService.getById(id);
+        return R.ok().data("sysRole", sysRole);
+    }
+
+    /**
+     * 修改角色
+     */
+    @ApiOperation("修改角色")
+    @PutMapping()
+    public R updateRole(@RequestBody SysRole sysRole) {
+        boolean result = sysRoleService.updateById(sysRole);
+        return result ? R.ok() : R.error();
+    }
 }
 
 
