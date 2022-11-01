@@ -2,6 +2,7 @@ package com.fosss.system.controller;
 
 import com.fosss.model.system.SysRole;
 import com.fosss.system.service.SysRoleService;
+import com.fosss.system.util.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,9 @@ public class SysRoleController {
      */
     @ApiOperation("查询所有角色")
     @GetMapping("/findAll")
-    public List<SysRole> findAll(){
-        return sysRoleService.list();
+    public R findAll() {
+        List<SysRole> sysRoleList = sysRoleService.list();
+        return R.ok().data("sysRoleList", sysRoleList);
     }
 
     /**
@@ -30,8 +32,8 @@ public class SysRoleController {
      */
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable String id){
-        return sysRoleService.removeById(id);
+    public R delete(@PathVariable String id) {
+        return sysRoleService.removeById(id) ? R.ok() : R.error();
     }
 }
 
