@@ -2,11 +2,14 @@ package com.fosss.system.controller;
 
 import com.fosss.model.system.SysRole;
 import com.fosss.system.service.SysRoleService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api("角色管理接口")
 @RestController
 @RequestMapping("/admin/system/sysRole")
 public class SysRoleController {
@@ -16,6 +19,7 @@ public class SysRoleController {
     /**
      * 查询所有角色
      */
+    @ApiOperation("查询所有角色")
     @GetMapping("/findAll")
     public List<SysRole> findAll(){
         return sysRoleService.list();
@@ -24,6 +28,7 @@ public class SysRoleController {
     /**
      * 逻辑删除
      */
+    @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public boolean delete(@PathVariable String id){
         return sysRoleService.removeById(id);
