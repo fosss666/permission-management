@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fosss.model.system.SysRole;
 import com.fosss.model.vo.SysRoleQueryVo;
+import com.fosss.system.exception.MyException;
 import com.fosss.system.service.SysRoleService;
 import com.fosss.system.util.R;
 import io.swagger.annotations.Api;
@@ -26,6 +27,10 @@ public class SysRoleController {
     @ApiOperation("查询所有角色")
     @GetMapping("/findAll")
     public R findAll() {
+//        int i=1/0;
+        if(true){
+            throw  new MyException(20000,"自定义异常");
+        }
         List<SysRole> sysRoleList = sysRoleService.list();
         return R.ok().data("sysRoleList", sysRoleList);
     }
