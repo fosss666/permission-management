@@ -79,6 +79,16 @@ public class SysRoleController {
         boolean result = sysRoleService.updateById(sysRole);
         return result ? R.ok() : R.error();
     }
+
+    /**
+     * 批量删除
+     */
+    @ApiOperation("批量删除")
+    @DeleteMapping
+    public R deleteRoles(@RequestBody List<Integer> ids) {
+        boolean result = sysRoleService.removeByIds(ids);
+        return result ? R.ok() : R.error();
+    }
 }
 
 
