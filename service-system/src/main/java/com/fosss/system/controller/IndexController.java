@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 @Api("登录接口")
 @RestController
 @RequestMapping("/admin/system/index")
-@CrossOrigin
+@CrossOrigin//解决跨域
 public class IndexController {
 
     /**
