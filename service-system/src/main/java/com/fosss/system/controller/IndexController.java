@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/admin/system/index")
 @CrossOrigin//解决跨域
+
 public class IndexController {
 
     /**
