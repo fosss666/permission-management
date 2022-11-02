@@ -31,7 +31,15 @@ public class IndexController {
                 .data("roles","admin")
                 .data("introduction","I am a super administrator")
                 .data("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif")
-                .data("name","Super Admin");
+                .data("name","Super Admin FOSSS");
+    }
+
+    /**
+     * 退出登录
+     */
+    @PostMapping("/logout")
+    public R logout(){
+        return R.ok();
     }
 }
 
