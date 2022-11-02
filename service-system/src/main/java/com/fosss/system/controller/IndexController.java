@@ -2,14 +2,12 @@ package com.fosss.system.controller;
 
 import com.fosss.system.util.R;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api("登录接口")
 @RestController
 @RequestMapping("/admin/system/index")
+@CrossOrigin
 public class IndexController {
 
     /**
