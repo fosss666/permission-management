@@ -25,8 +25,12 @@ export default {
     getPageList(pageNum = 1) {
       this.page = pageNum//默认为第一页
       roleApi.getPageList(this.page, this.limit, this.searchObj).then(res => {
-        console.log(res)
-        console.log(res.data)
+        // console.log(res)
+        // console.log(res.data)
+        this.total=res.data.pageInfo.total
+        this.roleList=res.data.pageInfo.records
+        console.log(this.roleList)
+
       })
 
     }
