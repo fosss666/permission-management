@@ -17,6 +17,7 @@ import java.util.List;
 @Api("角色管理接口")
 @RestController
 @RequestMapping("/admin/system/sysRole")
+@CrossOrigin
 public class SysRoleController {
     @Autowired
     private SysRoleService sysRoleService;
