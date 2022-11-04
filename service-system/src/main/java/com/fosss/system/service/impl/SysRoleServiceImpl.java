@@ -18,8 +18,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public IPage<SysRole> getPageCondition(Page<SysRole> pageParam, SysRoleQueryVo sysRoleQueryVo) {
         //封装查询条件
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(!ObjectUtils.isEmpty(sysRoleQueryVo.getRoleName()), SysRole::getRoleName, sysRoleQueryVo.getRoleName())
-                .eq(SysRole::getIsDeleted, 0);
+        wrapper.like(!ObjectUtils.isEmpty(sysRoleQueryVo.getRoleName()), SysRole::getRoleName, sysRoleQueryVo.getRoleName());
 
         Page<SysRole> sysRolePage = baseMapper.selectPage(pageParam, wrapper);
         return sysRolePage;

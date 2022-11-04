@@ -1,6 +1,23 @@
 <template>
 
   <div class="app-container">
+
+    <!--查询表单-->
+    <div class="search-div">
+      <el-form label-width="70px" size="small">
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="角色名称">
+              <el-input style="width: 100%" v-model="searchObj.roleName" placeholder="角色名称"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row style="display:flex">
+          <el-button type="primary" icon="el-icon-search" size="mini"  @click="getPageList()">搜索</el-button>
+          <el-button icon="el-icon-refresh" size="mini" @click="resetData">重置</el-button>
+        </el-row>
+      </el-form>
+    </div>
     <!-- 表格 -->
     <el-table
       v-loading="listLoading"
@@ -42,7 +59,7 @@
 </template>
 
 <script>
-import roleApi from '@/api/role/role'
+import roleApi from '@/api/system/role'
 
 export default {
   data() {
@@ -62,6 +79,7 @@ export default {
   methods: {
     getPageList(pageNum = 1) {
       this.page = pageNum//默认为第一页
+      console.log(this.searchObj)
       roleApi.getPageList(this.page, this.limit, this.searchObj).then(res => {
         // console.log(res)
         // console.log(res.data)
@@ -70,7 +88,10 @@ export default {
         // console.log(this.roleList)
         this.listLoading=false
       })
-
+    },
+    //搜索框重置方法
+    resetData(){
+      this.searchObj={}
     }
   }
 }

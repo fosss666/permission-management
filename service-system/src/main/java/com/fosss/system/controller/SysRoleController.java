@@ -29,8 +29,8 @@ public class SysRoleController {
     @GetMapping("/findAll")
     public R findAll() {
 //        int i=1/0;
-        if(true){
-            throw  new MyException(20000,"自定义异常");
+        if (true) {
+            throw new MyException(20000, "自定义异常");
         }
         List<SysRole> sysRoleList = sysRoleService.list();
         return R.ok().data("sysRoleList", sysRoleList);
