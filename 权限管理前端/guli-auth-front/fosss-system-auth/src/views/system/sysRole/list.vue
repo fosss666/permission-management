@@ -19,6 +19,13 @@
       </el-form>
     </div>
     <div>
+
+      <!-- 添加角色-->
+      <!-- 工具条 -->
+      <div class="tools-div">
+        <el-button type="success" icon="el-icon-plus" size="mini" @click="add">添 加</el-button>
+      </div>
+
       <!-- 表格 -->
       <el-table
         v-loading="listLoading"
@@ -48,6 +55,22 @@
         </el-table-column>
       </el-table>
 
+      <!--      添加和修改的弹出框-->
+      <el-dialog title="添加/修改" :visible.sync="dialogVisible" width="40%">
+        <el-form ref="dataForm" :model="sysRole" label-width="150px" size="small" style="padding-right: 40px;">
+          <el-form-item label="角色名称">
+            <el-input v-model="sysRole.roleName"/>
+          </el-form-item>
+          <el-form-item label="角色编码">
+            <el-input v-model="sysRole.roleCode"/>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false" size="small" icon="el-icon-refresh-right">取 消</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="saveOrUpdate()" size="small">确 定</el-button>
+      </span>
+      </el-dialog>
+
       <!-- 分页组件 -->
       <el-pagination
         :current-page="page"
@@ -73,6 +96,8 @@ export default {
       searchObj: {},//查询条件
       roleList: [],//查询到的角色集合
       listLoading: true,//是否显示加载中这个图标
+      dialogVisible: false,//添加修改弹出框是否显示
+      sysRole: {},//封装添加的角色
     }
   },
   created() {
@@ -80,23 +105,67 @@ export default {
     this.getPageList()
   },
   methods: {
+    //弹出修改弹框，回显数据
+    edit(id) {
+      //弹出弹框
+      this.dialogVisible = true
+      //回显数据
+      roleApi.getRoleById(id).then(res => {
+        // console.log(res.data.sysRole)
+        this.sysRole = res.data.sysRole
+      })
+    },
+    //调用添加或修改方法
+    saveOrUpdate() {
+      if (this.sysRole.id) {
+        this.updateRole()
+      } else {
+        this.addRole()
+      }
+    },
+    //添加方法
+    addRole() {
+      roleApi.addRole(this.sysRole).then(res => {
+        //关闭弹框
+        this.dialogVisible = false
+        //提示信息
+        this.$message.success("添加成功")
+        //刷新页面
+        this.getPageList()
+      })
+    },
+    //修改方法
+    updateRole() {
+      roleApi.updateRole(this.sysRole).then(res=> {
+        this.dialogVisible = false
+        this.$message.success("修改成功")
+        this.getPageList()
+      })
+    },
+    //弹出添加表单
+    add() {
+      //显示表单
+      this.dialogVisible = true
+      //将表单清空
+      this.sysRole = {}
+    },
 
-  getPageList(pageNum = 1) {
-    this.page = pageNum//默认为第一页
-    console.log(this.searchObj)
-    roleApi.getPageList(this.page, this.limit, this.searchObj).then(res => {
-      // console.log(res)
-      // console.log(res.data)
-      this.total = res.data.pageInfo.total
-      this.roleList = res.data.pageInfo.records
-      // console.log(this.roleList)
-      this.listLoading = false
-    })
-  },
-  //搜索框重置方法
-  resetData() {
-    this.searchObj = {}
-  },
+    getPageList(pageNum = 1) {
+      this.page = pageNum//默认为第一页
+      // console.log(this.searchObj)
+      roleApi.getPageList(this.page, this.limit, this.searchObj).then(res => {
+        // console.log(res)
+        // console.log(res.data)
+        this.total = res.data.pageInfo.total
+        this.roleList = res.data.pageInfo.records
+        // console.log(this.roleList)
+        this.listLoading = false
+      })
+    },
+    //搜索框重置方法
+    resetData() {
+      this.searchObj = {}
+    },
     //根据id删除
     removeDataById(id) {
       //弹出提示框
@@ -108,13 +177,13 @@ export default {
         //调用删除接口
         roleApi.removeDataById(id).then(res => {
           // console.log(res.code)
-          if(res.code===20000){
+          if (res.code === 20000) {
             this.$message({
               type: 'success',
               message: '删除成功!'
             });
             this.getPageList()
-          }else {
+          } else {
             this.$message({
               type: 'error',
               message: '删除失败'
