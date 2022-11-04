@@ -24,63 +24,67 @@
       <!-- 工具条 -->
       <div class="tools-div">
         <el-button type="success" icon="el-icon-plus" size="mini" @click="add">添 加</el-button>
+        <!--      批量删除-->
+        <el-button class="btn-add" size="mini" @click="removeRoles()">批量删除</el-button>
       </div>
+    </div>
 
-      <!-- 表格 -->
-      <el-table
-        v-loading="listLoading"
-        :data="roleList"
-        stripe
-        border
-        style="width: 100%;margin-top: 10px;">
+    <!-- 表格 -->
+    <el-table
+      v-loading="listLoading"
+      :data="roleList"
+      stripe
+      border
+      style="width: 100%;margin-top: 10px;"
+      @selection-change="handleSelectionChange">
+      <el-table-column type="selection"/>
 
-        <el-table-column
-          label="序号"
-          width="70"
-          align="center">
-          <template slot-scope="scope">
-            {{ (page - 1) * limit + scope.$index + 1 }}
-          </template>
-        </el-table-column>
+      <el-table-column
+        label="序号"
+        width="70"
+        align="center">
+        <template slot-scope="scope">
+          {{ (page - 1) * limit + scope.$index + 1 }}
+        </template>
+      </el-table-column>
 
-        <el-table-column prop="roleName" label="角色名称"/>
-        <el-table-column prop="roleCode" label="角色编码"/>
-        <el-table-column prop="createTime" label="创建时间" width="160"/>
-        <el-table-column label="操作" width="200" align="center">
-          <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" size="mini" @click="edit(scope.row.id)" title="修改"/>
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeDataById(scope.row.id)"
-                       title="删除"/>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-table-column prop="roleName" label="角色名称"/>
+      <el-table-column prop="roleCode" label="角色编码"/>
+      <el-table-column prop="createTime" label="创建时间" width="160"/>
+      <el-table-column label="操作" width="200" align="center">
+        <template slot-scope="scope">
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="edit(scope.row.id)" title="修改"/>
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeDataById(scope.row.id)"
+                     title="删除"/>
+        </template>
+      </el-table-column>
+    </el-table>
 
-      <!--      添加和修改的弹出框-->
-      <el-dialog title="添加/修改" :visible.sync="dialogVisible" width="40%">
-        <el-form ref="dataForm" :model="sysRole" label-width="150px" size="small" style="padding-right: 40px;">
-          <el-form-item label="角色名称">
-            <el-input v-model="sysRole.roleName"/>
-          </el-form-item>
-          <el-form-item label="角色编码">
-            <el-input v-model="sysRole.roleCode"/>
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
+    <!--      添加和修改的弹出框-->
+    <el-dialog title="添加/修改" :visible.sync="dialogVisible" width="40%">
+      <el-form ref="dataForm" :model="sysRole" label-width="150px" size="small" style="padding-right: 40px;">
+        <el-form-item label="角色名称">
+          <el-input v-model="sysRole.roleName"/>
+        </el-form-item>
+        <el-form-item label="角色编码">
+          <el-input v-model="sysRole.roleCode"/>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false" size="small" icon="el-icon-refresh-right">取 消</el-button>
         <el-button type="primary" icon="el-icon-check" @click="saveOrUpdate()" size="small">确 定</el-button>
       </span>
-      </el-dialog>
+    </el-dialog>
 
-      <!-- 分页组件 -->
-      <el-pagination
-        :current-page="page"
-        :total="total"
-        :page-size="limit"
-        style="padding: 30px 0; text-align: center;"
-        layout="total, prev, pager, next, jumper"
-        @current-change="getPageList"
-      />
-    </div>
+    <!-- 分页组件 -->
+    <el-pagination
+      :current-page="page"
+      :total="total"
+      :page-size="limit"
+      style="padding: 30px 0; text-align: center;"
+      layout="total, prev, pager, next, jumper"
+      @current-change="getPageList"
+    />
   </div>
 </template>
 
@@ -98,6 +102,7 @@ export default {
       listLoading: true,//是否显示加载中这个图标
       dialogVisible: false,//添加修改弹出框是否显示
       sysRole: {},//封装添加的角色
+      selectValue: [],//被选中的复选框
     }
   },
   created() {
@@ -105,6 +110,37 @@ export default {
     this.getPageList()
   },
   methods: {
+    //被选中的复选框
+    handleSelectionChange(selection){
+      // console.log(selection)
+      this.selectValue=selection
+    },
+    //批量删除
+    removeRoles() {
+      if(this.selectValue.length>0){
+        //弹出提示框
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          //封装被选中的id数组
+          var ids=[]
+          for(let i=0;i<this.selectValue.length;i++){
+            ids[i]=this.selectValue[i].id
+          }
+          console.log(ids)
+          //调用删除接口
+          roleApi.removeRoles(ids).then(res => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            this.getPageList()
+          })
+        })
+      }
+    },
     //弹出修改弹框，回显数据
     edit(id) {
       //弹出弹框
@@ -136,7 +172,7 @@ export default {
     },
     //修改方法
     updateRole() {
-      roleApi.updateRole(this.sysRole).then(res=> {
+      roleApi.updateRole(this.sysRole).then(res => {
         this.dialogVisible = false
         this.$message.success("修改成功")
         this.getPageList()

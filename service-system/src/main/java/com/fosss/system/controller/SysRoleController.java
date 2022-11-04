@@ -91,7 +91,7 @@ public class SysRoleController {
      */
     @ApiOperation("批量删除")
     @DeleteMapping
-    public R deleteRoles(@RequestBody List<Integer> ids) {
+    public R deleteRoles(@RequestBody List<String> ids) {
         boolean result = sysRoleService.removeByIds(ids);
         return result ? R.ok() : R.error();
     }

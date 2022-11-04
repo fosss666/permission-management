@@ -41,6 +41,14 @@ export default {
       method:'put',
       data:sysRole
     })
+  },
+  //批量删除
+  removeRoles(ids){
+    return request({
+      url:`${api_name}`,
+      method:'delete',
+      data:ids
+    })
   }
 }
 
