@@ -36,7 +36,7 @@
       :page-size="limit"
       style="padding: 30px 0; text-align: center;"
       layout="total, prev, pager, next, jumper"
-      @current-change="fetchData"
+      @current-change="getPageList"
     />
   </div>
 </template>
@@ -48,7 +48,7 @@ export default {
   data() {
     return {
       page: 1,//当前页
-      limit: 10,//每页条数
+      limit: 4,//每页条数
       total: 0,//总页数
       searchObj: {},//查询条件
       roleList: [],//查询到的角色集合
