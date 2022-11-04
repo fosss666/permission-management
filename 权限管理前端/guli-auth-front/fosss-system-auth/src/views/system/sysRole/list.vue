@@ -52,6 +52,7 @@ export default {
       total: 0,//总页数
       searchObj: {},//查询条件
       roleList: [],//查询到的角色集合
+      listLoading:true,//是否显示加载中这个图标
     }
   },
   created() {
@@ -66,8 +67,8 @@ export default {
         // console.log(res.data)
         this.total=res.data.pageInfo.total
         this.roleList=res.data.pageInfo.records
-        console.log(this.roleList)
-
+        // console.log(this.roleList)
+        this.listLoading=false
       })
 
     }
