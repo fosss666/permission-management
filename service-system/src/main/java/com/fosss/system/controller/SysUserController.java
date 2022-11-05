@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -95,10 +96,33 @@ public class SysUserController {
      */
     @ApiOperation("更改用户状态")
     @PutMapping("/{id}/{status}")
-    public R updateStatus(@PathVariable String id,@PathVariable int status){
+    public R updateStatus(@PathVariable String id, @PathVariable int status) {
         sysUserService.updateStatus(id, status);
         return R.ok();
     }
+
+    /**
+     * 给用户分配角色
+     * 1.查询所有角色和当前用户已经分配的角色,用于回显数据
+     */
+    @ApiOperation("询所有角色和当前用户已经分配的角色,用于回显数据")
+    @GetMapping("/doAssign/{userId}")
+    public R getUserRoles(@PathVariable String userId) {
+        Map<String, Object> map = sysUserService.getUserRoles(userId);
+        return R.ok().data("map", map);
+    }
+
+    /**
+     * 给用户分配角色
+     * 2.删除当前用户的角色，添加新的角色来实现更改用户的角色
+     */
+    @ApiOperation("删除当前用户的角色，添加新的角色来实现更改用户的角色")
+    @PostMapping("/doAssign/{userId}")
+    public R doAssignRole(@PathVariable String userId, @RequestBody List<String> userRoleList) {
+        sysUserService.doAssignRole(userId, userRoleList);
+        return R.ok();
+    }
+
 }
 
 

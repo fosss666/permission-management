@@ -4,13 +4,21 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fosss.model.base.BaseEntity;
+import com.fosss.model.system.SysRole;
 import com.fosss.model.system.SysUser;
+import com.fosss.model.system.SysUserRole;
 import com.fosss.model.vo.SysUserQueryVo;
+import com.fosss.system.mapper.SysRoleMapper;
 import com.fosss.system.mapper.SysUserMapper;
+import com.fosss.system.mapper.SysUserRoleMapper;
 import com.fosss.system.service.SysUserService;
-import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -22,6 +30,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+
+    @Autowired
+    private SysRoleMapper sysRoleMapper;
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
     @Override
     public Page<SysUser> getPageCondition(Long page, Long limit, SysUserQueryVo sysUserQueryVo) {
@@ -47,6 +60,45 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUser.setStatus(status);
         //进行修改
         baseMapper.updateById(sysUser);
+    }
+
+    /**
+     * 给用户分配角色
+     * 1.查询所有角色和当前用户已经分配的角色
+     */
+    @Override
+    public Map<String, Object> getUserRoles(String userId) {
+        Map<String,Object> map=new HashMap<>();
+        //查询所有角色
+        List<SysRole> roleList = sysRoleMapper.selectList(null);
+        map.put("roleList",roleList);
+
+        //查询当前用户所拥有的角色
+        LambdaQueryWrapper<SysUserRole> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(SysUserRole::getUserId,userId).orderByDesc(BaseEntity::getUpdateTime);
+        List<SysUserRole> userRoles = sysUserRoleMapper.selectList(wrapper);
+        map.put("userRoles",userRoles);
+
+        return map;
+    }
+    /**
+     * 给用户分配角色
+     * 2.删除当前用户的角色，添加新的角色来实现更改用户的角色
+     */
+    @Override
+    public void doAssignRole(String userId, List<String> userRoleList) {
+        //先删除当前用户的角色
+        LambdaQueryWrapper<SysUserRole> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(SysUserRole::getUserId,userId);
+        sysUserRoleMapper.delete(wrapper);
+
+        //在添加新的用户角色
+        for (String userRole : userRoleList) {
+            SysUserRole sysUserRole = new SysUserRole();
+            sysUserRole.setUserId(userId);
+            sysUserRole.setRoleId(userRole);
+            sysUserRoleMapper.insert(sysUserRole);
+        }
     }
 
 }
