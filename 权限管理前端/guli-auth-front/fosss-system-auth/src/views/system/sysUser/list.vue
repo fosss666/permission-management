@@ -114,7 +114,6 @@
 
 <script>
 import userApi from '@/api/system/user'
-import roleApi from "@/api/system/role";
 
 export default {
   data() {
@@ -123,7 +122,7 @@ export default {
       list: null, // 列表
       total: 0, // 数据库中的总记录数
       page: 1, // 默认页码
-      limit: 10, // 每页记录数
+      limit: 4, // 每页记录数
       searchObj: {}, // 查询表单对象
 
       createTimes: [],
@@ -138,6 +137,16 @@ export default {
     this.fetchData()
   },
   methods: {
+    //更改用户状态
+    switchStatus(row) {
+      //更改状态
+      row.status = row.status === 1 ? 0 : 1;
+      //调用接口
+      userApi.updateStatus(row.id, row.status).then(res => {
+        this.$message.success("状态修改成功")
+        this.fetchData(this.page)
+      })
+    },
     // 加载banner列表数据
     fetchData(page = 1) {
       this.page = page
@@ -225,7 +234,7 @@ export default {
     },
     //批量删除
     removeUsers() {
-      if(this.selectValue.length>0){
+      if (this.selectValue.length > 0) {
         //弹出提示框
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -233,9 +242,9 @@ export default {
           type: 'warning'
         }).then(() => {
           //封装被选中的id数组
-          var ids=[]
-          for(let i=0;i<this.selectValue.length;i++){
-            ids[i]=this.selectValue[i].id
+          var ids = []
+          for (let i = 0; i < this.selectValue.length; i++) {
+            ids[i] = this.selectValue[i].id
           }
           // console.log(ids)
           //调用删除接口
@@ -250,9 +259,9 @@ export default {
       }
     },
     //被选中的复选框
-    handleSelectionChange(selection){
+    handleSelectionChange(selection) {
       // console.log(selection)
-      this.selectValue=selection
+      this.selectValue = selection
     },
   }
 }

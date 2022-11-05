@@ -89,6 +89,16 @@ public class SysUserController {
         boolean result = sysUserService.removeByIds(ids);
         return result ? R.ok() : R.error();
     }
+
+    /**
+     * 更改用户状态
+     */
+    @ApiOperation("更改用户状态")
+    @PutMapping("/{id}/{status}")
+    public R updateStatus(@PathVariable String id,@PathVariable int status){
+        sysUserService.updateStatus(id, status);
+        return R.ok();
+    }
 }
 
 

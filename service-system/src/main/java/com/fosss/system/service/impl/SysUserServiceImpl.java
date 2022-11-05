@@ -36,6 +36,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return baseMapper.selectPage(pageParam, wrapper);
     }
 
+    /**
+     * 更改用户状态
+     */
+    @Override
+    public void updateStatus(String id, int status) {
+        //查询用户信息
+        SysUser sysUser = baseMapper.selectById(id);
+        //设置用户状态
+        sysUser.setStatus(status);
+        //进行修改
+        baseMapper.updateById(sysUser);
+    }
+
 }
 
 

@@ -17,4 +17,5 @@ public interface SysUserService extends IService<SysUser> {
 
     Page<SysUser> getPageCondition(Long page, Long limit, SysUserQueryVo sysUserQueryVo);
 
+    void updateStatus(String id, int status);
 }
