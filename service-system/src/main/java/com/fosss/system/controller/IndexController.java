@@ -4,7 +4,7 @@ import com.fosss.system.util.R;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
-@Api("登录接口")
+@Api(tags = "登录接口")
 @RestController
 @RequestMapping("/admin/system/index")
 @CrossOrigin//解决跨域

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api("角色管理接口")
+@Api(tags = "角色管理接口")
 @RestController
 @RequestMapping("/admin/system/sysRole")
 @CrossOrigin
