@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,11 +74,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         List<SysRole> roleList = sysRoleMapper.selectList(null);
         map.put("roleList",roleList);
 
-        //查询当前用户所拥有的角色
+        //查询当前用户所拥有的角色的id
         LambdaQueryWrapper<SysUserRole> wrapper=new LambdaQueryWrapper<>();
         wrapper.eq(SysUserRole::getUserId,userId).orderByDesc(BaseEntity::getUpdateTime);
         List<SysUserRole> userRoles = sysUserRoleMapper.selectList(wrapper);
-        map.put("userRoles",userRoles);
+        List<String> userRoleIds=new ArrayList<>();
+        for (SysUserRole userRole : userRoles) {
+            userRoleIds.add(userRole.getRoleId());
+        }
+
+        map.put("userRoleIds",userRoleIds);
 
         return map;
     }
