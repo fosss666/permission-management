@@ -56,7 +56,23 @@ export default {
       url: `${api_name}/${id}/${status}`,
       method: 'put'
     })
-  }
+  },
+  //给用户分配角色
+  //获取所有角色和当前用户的角色
+  getUserRoles(userId){
+    return request({
+      url: `${api_name}/doAssign/${userId}`,
+      method: 'get'
+    })
+  },
+  //给当前用户分配角色
+  doAssignRole(userId,userRoleList){
+    return request({
+      url: `${api_name}/doAssign/${userId}`,
+      method: 'post',
+      data:userRoleList
+    })
+  },
 }
 
 
