@@ -8,6 +8,7 @@ import com.fosss.model.system.SysUser;
 import com.fosss.model.vo.SysUserQueryVo;
 import com.fosss.system.mapper.SysUserMapper;
 import com.fosss.system.service.SysUserService;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .orderByDesc(BaseEntity::getUpdateTime);
         return baseMapper.selectPage(pageParam, wrapper);
     }
+
 }
 
 

@@ -129,14 +129,14 @@ export default {
           for(let i=0;i<this.selectValue.length;i++){
             ids[i]=this.selectValue[i].id
           }
-          console.log(ids)
+          // console.log(ids)
           //调用删除接口
           roleApi.removeRoles(ids).then(res => {
             this.$message({
               type: 'success',
               message: '删除成功!'
             });
-            this.getPageList()
+            this.getPageList(this.page)
           })
         })
       }
@@ -167,7 +167,7 @@ export default {
         //提示信息
         this.$message.success("添加成功")
         //刷新页面
-        this.getPageList()
+        this.getPageList(this.page)
       })
     },
     //修改方法
@@ -175,7 +175,7 @@ export default {
       roleApi.updateRole(this.sysRole).then(res => {
         this.dialogVisible = false
         this.$message.success("修改成功")
-        this.getPageList()
+        this.getPageList(this.page)
       })
     },
     //弹出添加表单

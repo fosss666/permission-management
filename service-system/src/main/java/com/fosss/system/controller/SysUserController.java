@@ -23,7 +23,8 @@ import java.util.List;
  */
 @Api(tags = "用户管理接口")
 @RestController
-@RequestMapping("/admin/system/user")
+@RequestMapping("/admin/system/sysUser")
+@CrossOrigin
 public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
@@ -44,6 +45,7 @@ public class SysUserController {
     @ApiOperation("添加用户")
     @PostMapping
     public R addUser(@RequestBody SysUser sysUser) {
+        //先判断数据库中是否有该用户（有可能已经添加过，只是逻辑删除了 is_deleted=1）
         boolean result = sysUserService.save(sysUser);
         return result ? R.ok() : R.error();
     }

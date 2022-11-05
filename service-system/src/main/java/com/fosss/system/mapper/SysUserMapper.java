@@ -2,6 +2,7 @@ package com.fosss.system.mapper;
 
 import com.fosss.model.system.SysUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
