@@ -78,6 +78,16 @@ public class SysMenuController {
         return result ? R.ok() : R.error();
     }
 
+    /**
+     * 更改菜单状态
+     */
+    @ApiOperation("更改菜单状态")
+    @PutMapping("/{id}/{status}")
+    public R updateStatus(@PathVariable String id, @PathVariable int status) {
+        sysMenuService.updateStatus(id, status);
+        return R.ok();
+    }
+
 }
 
 

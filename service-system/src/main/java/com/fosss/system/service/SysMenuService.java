@@ -22,4 +22,8 @@ public interface SysMenuService extends IService<SysMenu> {
      * 删除菜单
      */
     boolean removeMenu(String id);
+    /**
+     * 更改菜单状态
+     */
+    void updateStatus(String id, int status);
 }

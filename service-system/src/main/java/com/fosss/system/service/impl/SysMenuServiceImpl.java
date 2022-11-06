@@ -55,6 +55,38 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         int i = baseMapper.deleteById(id);
         return i > 0;
     }
+
+    /**
+     * 更改菜单状态
+     */
+    @Override
+    public void updateStatus(String id, int status) {
+
+        //进行修改，注意同时要将其子菜单的状态改掉
+        //查询所有菜单
+        List<SysMenu> sysMenus = baseMapper.selectList(null);
+        updateChildrenStatus(id, status, sysMenus);
+
+    }
+
+    /**
+     * 递归更改菜单状态
+     *
+     * @param id     当前菜单id
+     * @param status 要更改的状态
+     */
+    private void updateChildrenStatus(String id, int status, List<SysMenu> sysMenus) {
+        //将当前菜单的状态先改掉
+        SysMenu menu = baseMapper.selectById(id);
+        menu.setStatus(status);
+        baseMapper.updateById(menu);
+        //递归寻找当前菜单的子菜单，改其状态
+        for (SysMenu sysMenu : sysMenus) {
+            if (sysMenu.getParentId().equals(id)) {
+                updateChildrenStatus(sysMenu.getId(), status, sysMenus);
+            }
+        }
+    }
 }
 
 
