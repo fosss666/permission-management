@@ -18,5 +18,8 @@ public interface SysMenuService extends IService<SysMenu> {
      * 查询菜单列表（树形结构）
      */
     List<SysMenu> getMenusTree();
-
+    /**
+     * 删除菜单
+     */
+    boolean removeMenu(String id);
 }
