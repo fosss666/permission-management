@@ -5,6 +5,7 @@ import com.fosss.model.system.SysMenu;
 import com.fosss.system.mapper.SysMenuMapper;
 import com.fosss.system.service.SysMenuService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
  * @author fosss
  * @since 2022-11-06
  */
+@Transactional
 @Service
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
 

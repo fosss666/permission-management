@@ -9,10 +9,11 @@ import com.fosss.model.system.SysRole;
 import com.fosss.model.vo.SysRoleQueryVo;
 import com.fosss.system.mapper.SysRoleMapper;
 import com.fosss.system.service.SysRoleService;
-import io.jsonwebtoken.lang.Objects;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+@Transactional
 @Service
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
     @Override
