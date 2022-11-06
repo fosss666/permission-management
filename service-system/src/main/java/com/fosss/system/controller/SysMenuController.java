@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * <p>
  * 菜单表 前端控制器
@@ -31,8 +33,8 @@ public class SysMenuController {
     @ApiOperation("查询菜单列表")
     @GetMapping
     public R getMenusTree() {
-        SysMenu menusTree = sysMenuService.getMenusTree();
-        return R.ok().data("menusTree", menusTree);
+        List<SysMenu> menusTreeList = sysMenuService.getMenusTree();
+        return R.ok().data("menusTreeList", menusTreeList);
     }
 
     /**

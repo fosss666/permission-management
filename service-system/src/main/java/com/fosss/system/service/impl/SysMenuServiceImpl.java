@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fosss.model.system.SysMenu;
 import com.fosss.system.mapper.SysMenuMapper;
 import com.fosss.system.service.SysMenuService;
+import com.fosss.system.utils.MenuHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <p>
@@ -23,8 +26,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * 查询菜单列表（树形结构）
      */
     @Override
-    public SysMenu getMenusTree() {
-        return null;
+    public List<SysMenu> getMenusTree() {
+
+        //1.查询所有菜单
+        List<SysMenu> menusList = baseMapper.selectList(null);
+
+        //2.写一个工具类将菜单封装成树形结构
+        List<SysMenu> menusTreeList= MenuHelper.buildTree(menusList);
+
+        return menusTreeList;
     }
 }
 
