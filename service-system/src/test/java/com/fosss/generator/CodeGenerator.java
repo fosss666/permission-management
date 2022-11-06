@@ -1,6 +1,5 @@
 package com.fosss.generator;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
@@ -43,8 +42,8 @@ public class CodeGenerator {
 
         //策略设置
         StrategyConfig strategyConfig = new StrategyConfig();
-        strategyConfig.setInclude("sys_user");  //设置当前参与生成的表名，参数为可变参数
-        strategyConfig.setTablePrefix("sys_");  //设置数据库表的前缀名称，模块名 = 数据库表名 - 前缀名  例如： User = tbl_user - tbl_
+        strategyConfig.setInclude("sys_menu");  //设置当前参与生成的表名，参数为可变参数
+//        strategyConfig.setTablePrefix("sys_");  //设置数据库表的前缀名称，模块名 = 数据库表名 - 前缀名  例如： User = tbl_user - tbl_
         strategyConfig.setRestControllerStyle(true);    //设置是否启用Rest风格
         strategyConfig.setVersionFieldName("version");  //设置乐观锁字段名
         strategyConfig.setLogicDeleteFieldName("deleted");  //设置逻辑删除字段名

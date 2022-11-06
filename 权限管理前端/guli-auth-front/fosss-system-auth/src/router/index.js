@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: {title: 'Dashboard', icon: 'dashboard'}
     }]
   },
   {
@@ -67,24 +67,43 @@ export const constantRoutes = [
         path: 'sysRole',
         component: () => import('@/views/system/sysRole/list'),
         name: 'SysRole',
-        meta: { title: '角色管理', icon: 'edit' }
+        meta: {title: '角色管理', icon: 'el-icon-s-custom'},
       },
       {
         path: 'sysUser',
         component: () => import('@/views/system/sysUser/list'),
         name: 'SysUser',
-        meta: { title: '用户管理', icon:'edit' },
+        meta: {title: '用户管理', icon: 'el-icon-s-help'},
       },
+      {
+        name: 'sysMenu',
+        path: 'sysMenu',
+        component: () => import('@/views/system/sysMenu/list'),
+        meta: {
+          title: '菜单管理',
+          icon: 'el-icon-s-unfold'
+        },
+      },
+      {
+        path: 'assignAuth',
+        component: () => import('@/views/system/sysRole/assignAuth'),
+        meta: {
+          activeMenu: '/system/sysRole',
+          title: '角色授权'
+        },
+        hidden: true,
+      }
+
     ]
   },
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  {path: '*', redirect: '/404', hidden: true}
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })
 
