@@ -16,7 +16,7 @@ public class MenuHelper {
 
         //1.对所有的一级菜单（parentId==0）进行处理
         for (SysMenu sysMenu : menusList) {
-            if (Integer.parseInt(sysMenu.getParentId()) == 0) {
+            if (sysMenu.getParentId().equals("0")) {
                 menusTreeList.add(getChildren(sysMenu, menusList));
             }
         }

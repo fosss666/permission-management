@@ -222,7 +222,7 @@ export default {
         this.fetchData(this.page)
       })
     },
-    // 加载banner列表数据
+    // 加载列表数据
     fetchData(page = 1) {
       this.page = page
       /*封装开始结束时间*/
