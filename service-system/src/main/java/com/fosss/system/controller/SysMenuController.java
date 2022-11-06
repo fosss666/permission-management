@@ -22,6 +22,7 @@ import java.util.List;
 @Api(tags = "菜单管理接口")
 @RestController
 @RequestMapping("/admin/system/sysMenu")
+@CrossOrigin
 public class SysMenuController {
 
     @Autowired
