@@ -117,7 +117,7 @@ public class SysUserController {
      * 2.删除当前用户的角色，添加新的角色来实现更改用户的角色
      */
     @ApiOperation("删除当前用户的角色，添加新的角色来实现更改用户的角色")
-    @PostMapping("/doAssign/{userId}")
+    @PostMapping("/doAssign/{userId}") //AssignRoleVo可以直接用这个类来接收
     public R doAssignRole(@PathVariable String userId, @RequestBody List<String> userRoleList) {
         sysUserService.doAssignRole(userId, userRoleList);
         return R.ok();
