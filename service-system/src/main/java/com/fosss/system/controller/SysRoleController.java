@@ -2,7 +2,9 @@ package com.fosss.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fosss.model.system.SysMenu;
 import com.fosss.model.system.SysRole;
+import com.fosss.model.vo.AssignMenuVo;
 import com.fosss.model.vo.SysRoleQueryVo;
 import com.fosss.system.exception.MyException;
 import com.fosss.system.service.SysRoleService;
@@ -94,6 +96,26 @@ public class SysRoleController {
     public R deleteRoles(@RequestBody List<String> ids) {
         boolean result = sysRoleService.removeByIds(ids);
         return result ? R.ok() : R.error();
+    }
+
+    /**
+     * 根据角色id显示所有菜单和已经分配过的菜单
+     */
+    @ApiOperation("显示所有菜单和已分配菜单")
+    @GetMapping("/doAssign/{roleId}")
+    public R getRoleMenus(@PathVariable String roleId) {
+        List<SysMenu> sysMenus = sysRoleService.getRoleMenus(roleId);
+        return R.ok().data("list", sysMenus);
+    }
+
+    /**
+     * 根据角色id给角色分配菜单，先删除原有分配，再添加现有分配
+     */
+    @ApiOperation("给角色分配菜单")
+    @PostMapping("/doAssign")
+    public R doAssignMenu(@RequestBody AssignMenuVo assignMenuVo){
+        sysRoleService.doAssignMenu(assignMenuVo);
+        return R.ok();
     }
 }
 
