@@ -24,7 +24,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MyException.class)
     public R doException(MyException e){
         e.printStackTrace();
-        return R.error().data("data","执行了自定义异常处理:"+e.getMessage());
+//        return R.error().data("data","执行了自定义异常处理:"+e.getMessage());
+        return new R().message(e.getMessage()).code(20001);
     }
 }
 

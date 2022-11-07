@@ -62,11 +62,29 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public void updateStatus(String id, int status) {
 
-        //进行修改，注意同时要将其子菜单的状态改掉
+        //进行修改，注意同时要将其子菜单的状态改掉，并且当该菜单的父菜单或爷爷菜单的状态为关闭时，不能对此菜单进行操作
         //查询所有菜单
         List<SysMenu> sysMenus = baseMapper.selectList(null);
+        //判断父菜单或爷爷菜单的状态
+        judgeFatherStatus(id,sysMenus);
+        //改菜单及子菜单状态
         updateChildrenStatus(id, status, sysMenus);
 
+    }
+    //判断父菜单或爷爷菜单的状态
+    private void judgeFatherStatus(String id, List<SysMenu> sysMenus) {
+        SysMenu currentMenu = baseMapper.selectById(id);
+        for (SysMenu sysMenu : sysMenus) {
+            if(sysMenu.getId().equals(currentMenu.getParentId())){
+                if(sysMenu.getStatus()==0){
+                    //将
+                    //抛出异常
+                    throw new MyException(20001,"请先开启上级菜单");
+                }
+                //递归判断
+                judgeFatherStatus(sysMenu.getId(),sysMenus);
+            }
+        }
     }
 
     /**

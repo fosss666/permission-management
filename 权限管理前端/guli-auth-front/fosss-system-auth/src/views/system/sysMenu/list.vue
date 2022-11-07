@@ -214,6 +214,11 @@ export default {
       api.updateStatus(row.id, row.status).then(res => {
         this.$message.success("状态修改成功")
         this.fetchData(this.page)
+      }).catch(res=>{
+        // console.log(res)
+        // this.$message.error(res.message)
+        //捕捉到异常后，撤回更改状态的操作
+        row.status=0;
       })
     },
     //调用api层获取数据库中的数据

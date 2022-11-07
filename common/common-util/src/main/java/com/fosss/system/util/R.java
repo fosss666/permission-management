@@ -16,7 +16,7 @@ public class R {
     /**
      * 将无参构造私有化
      */
-    private R(){};
+    public R(){};
 
     public static R ok(){
         R r = new R();
