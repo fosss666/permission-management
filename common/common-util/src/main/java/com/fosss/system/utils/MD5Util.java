@@ -55,7 +55,6 @@ public final class MD5Util {
         System.out.println("MD5后：" + encrypt(s));
         System.out.println("加密的：" + convertMD5(s));
         System.out.println("解密的：" + convertMD5(convertMD5(s)));
-        System.out.println(convertMD5("EEEE"));
 
     }
 
