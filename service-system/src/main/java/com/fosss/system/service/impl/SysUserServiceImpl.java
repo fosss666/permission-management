@@ -7,11 +7,15 @@ import com.fosss.model.base.BaseEntity;
 import com.fosss.model.system.SysRole;
 import com.fosss.model.system.SysUser;
 import com.fosss.model.system.SysUserRole;
+import com.fosss.model.vo.LoginVo;
 import com.fosss.model.vo.SysUserQueryVo;
+import com.fosss.system.exception.MyException;
 import com.fosss.system.mapper.SysRoleMapper;
 import com.fosss.system.mapper.SysUserMapper;
 import com.fosss.system.mapper.SysUserRoleMapper;
 import com.fosss.system.service.SysUserService;
+import com.fosss.system.utils.JwtUtils;
+import com.fosss.system.utils.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,24 +75,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public Map<String, Object> getUserRoles(String userId) {
-        Map<String,Object> map=new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         //查询所有角色
         List<SysRole> roleList = sysRoleMapper.selectList(null);
-        map.put("roleList",roleList);
+        map.put("roleList", roleList);
 
         //查询当前用户所拥有的角色的id
-        LambdaQueryWrapper<SysUserRole> wrapper=new LambdaQueryWrapper<>();
-        wrapper.eq(SysUserRole::getUserId,userId).orderByDesc(BaseEntity::getUpdateTime);
+        LambdaQueryWrapper<SysUserRole> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUserRole::getUserId, userId).orderByDesc(BaseEntity::getUpdateTime);
         List<SysUserRole> userRoles = sysUserRoleMapper.selectList(wrapper);
-        List<String> userRoleIds=new ArrayList<>();
+        List<String> userRoleIds = new ArrayList<>();
         for (SysUserRole userRole : userRoles) {
             userRoleIds.add(userRole.getRoleId());
         }
 
-        map.put("userRoleIds",userRoleIds);
+        map.put("userRoleIds", userRoleIds);
 
         return map;
     }
+
     /**
      * 给用户分配角色
      * 2.删除当前用户的角色，添加新的角色来实现更改用户的角色
@@ -96,8 +101,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public void doAssignRole(String userId, List<String> userRoleList) {
         //先删除当前用户的角色
-        LambdaQueryWrapper<SysUserRole> wrapper=new LambdaQueryWrapper<>();
-        wrapper.eq(SysUserRole::getUserId,userId);
+        LambdaQueryWrapper<SysUserRole> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUserRole::getUserId, userId);
         sysUserRoleMapper.delete(wrapper);
 
         //在添加新的用户角色
@@ -107,6 +112,29 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             sysUserRole.setRoleId(userRole);
             sysUserRoleMapper.insert(sysUserRole);
         }
+    }
+
+    /**
+     * 登录接口
+     */
+    @Override
+    public String loginByUsername(LoginVo loginVo) {
+        //先判断是否存在当前用户及密码是否正确
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getUsername,loginVo.getUsername())
+                .eq(SysUser::getPassword, MD5Util.convertMD5(loginVo.getPassword()));
+        SysUser sysUser = baseMapper.selectOne(wrapper);
+        if(sysUser==null){
+            throw new MyException(20001,"用户名或密码错误");
+        }
+        //用户存在且密码正确时，判断用户状态
+        if(sysUser.getStatus()==0){
+            throw new MyException(20001,"该用户已被禁用，请联系管理员");
+        }
+
+        //都没有问题后，获取token并返回
+        String token = JwtUtils.getJwtToken(sysUser.getId(), sysUser.getUsername());
+        return token;
     }
 
 }

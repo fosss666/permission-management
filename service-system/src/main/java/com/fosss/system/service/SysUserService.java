@@ -3,6 +3,7 @@ package com.fosss.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fosss.model.system.SysUser;
+import com.fosss.model.vo.LoginVo;
 import com.fosss.model.vo.SysUserQueryVo;
 
 import java.util.List;
@@ -32,4 +33,8 @@ public interface SysUserService extends IService<SysUser> {
      * 2.删除当前用户的角色，添加新的角色来实现更改用户的角色
      */
     void doAssignRole(String userId, List<String> userRoleList);
+    /**
+     * 登录接口
+     */
+    String loginByUsername(LoginVo loginVo);
 }
