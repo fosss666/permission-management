@@ -6,6 +6,7 @@ import com.fosss.model.system.SysUser;
 import com.fosss.model.vo.SysUserQueryVo;
 import com.fosss.system.service.SysUserService;
 import com.fosss.system.result.R;
+import com.fosss.system.utils.MD5Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,8 @@ public class SysUserController {
     @PostMapping
     public R addUser(@RequestBody SysUser sysUser) {
         //先判断数据库中是否有该用户（有可能已经添加过，只是逻辑删除了 is_deleted=1）
+        String password = MD5Util.encrypt(sysUser.getPassword());
+        sysUser.setPassword(password);
         boolean result = sysUserService.save(sysUser);
         return result ? R.ok() : R.error();
     }
@@ -58,6 +61,9 @@ public class SysUserController {
     @GetMapping("{id}")
     public R getUserById(@PathVariable String id) {
         SysUser user = sysUserService.getById(id);
+        //将查询到的密码进行解密
+        String password = MD5Util.convertMD5(MD5Util.convertMD5(user.getPassword()));
+        user.setPassword(password);
         return R.ok().data("user", user);
     }
 
@@ -67,6 +73,8 @@ public class SysUserController {
     @ApiOperation("修改用户")
     @PutMapping
     public R updateUser(@RequestBody SysUser sysUser) {
+        String password = MD5Util.encrypt(sysUser.getPassword());
+        sysUser.setPassword(password);
         boolean result = sysUserService.updateById(sysUser);
         return result ? R.ok() : R.error();
     }
