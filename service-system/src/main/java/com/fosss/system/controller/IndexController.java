@@ -1,6 +1,6 @@
 package com.fosss.system.controller;
 
-import com.fosss.system.util.R;
+import com.fosss.system.result.R;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 

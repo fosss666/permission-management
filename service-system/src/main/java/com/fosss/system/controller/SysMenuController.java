@@ -3,7 +3,7 @@ package com.fosss.system.controller;
 
 import com.fosss.model.system.SysMenu;
 import com.fosss.system.service.SysMenuService;
-import com.fosss.system.util.R;
+import com.fosss.system.result.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

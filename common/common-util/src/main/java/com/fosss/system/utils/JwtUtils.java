@@ -1,4 +1,4 @@
-package com.fosss.system;
+package com.fosss.system.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

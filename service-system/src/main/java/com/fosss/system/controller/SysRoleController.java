@@ -8,7 +8,7 @@ import com.fosss.model.vo.AssignMenuVo;
 import com.fosss.model.vo.SysRoleQueryVo;
 import com.fosss.system.exception.MyException;
 import com.fosss.system.service.SysRoleService;
-import com.fosss.system.util.R;
+import com.fosss.system.result.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

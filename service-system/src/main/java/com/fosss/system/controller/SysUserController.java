@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fosss.model.system.SysUser;
 import com.fosss.model.vo.SysUserQueryVo;
 import com.fosss.system.service.SysUserService;
-import com.fosss.system.util.R;
+import com.fosss.system.result.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

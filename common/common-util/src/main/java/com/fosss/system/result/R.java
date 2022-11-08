@@ -1,4 +1,4 @@
-package com.fosss.system.util;
+package com.fosss.system.result;
 
 import lombok.Data;
 

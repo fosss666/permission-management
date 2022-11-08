@@ -1,6 +1,6 @@
 package com.fosss.system.exception;
 
-import com.fosss.system.util.R;
+import com.fosss.system.result.R;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

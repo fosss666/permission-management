@@ -1,6 +1,4 @@
-package com.fosss.system.util;
-
-import lombok.Data;
+package com.fosss.system.result;
 
 /**
  * 封装成功失败的响应码
