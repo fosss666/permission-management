@@ -3,9 +3,13 @@ package com.fosss.system.controller;
 import com.fosss.model.vo.LoginVo;
 import com.fosss.system.result.R;
 import com.fosss.system.service.SysUserService;
+import com.fosss.system.utils.JwtUtils;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Api(tags = "登录接口")
 @RestController
@@ -33,15 +37,30 @@ public class IndexController {
 
     /**
      * 用户详情
-     * {"code":20000,"data":{"roles":["admin"],"introduction":"I am a super administrator","avatar":"https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif","name":"Super Admin"}}
+     * {"code":20000,"data":
+     * {
+     * "roles":["admin"],
+     * "introduction":"I am a super administrator",
+     * "avatar":"https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
+     * "name":"Super Admin"}}
      */
+//    @GetMapping("info")
+//    public R loginInfo() {
+//        return R.ok()
+//                .data("roles", "admin")
+//                .data("introduction", "I am a super administrator")
+//                .data("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif")
+//                .data("name", "Super Admin FOSSS");
+//    }
     @GetMapping("info")
-    public R loginInfo() {
-        return R.ok()
-                .data("roles", "admin")
-                .data("introduction", "I am a super administrator")
-                .data("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif")
-                .data("name", "Super Admin FOSSS");
+    public R loginInfo(HttpServletRequest request) {
+        //获取token
+        String token = request.getHeader("token");
+        //获取用户id
+        String username = JwtUtils.getUserName(token);
+        //根据用户名称查询用户基本信息、菜单权限和按钮权限
+        Map<String, Object> map = sysUserService.getUserInfo(username);
+        return R.ok().data("map", map);
     }
 
     /**

@@ -37,4 +37,7 @@ public interface SysUserService extends IService<SysUser> {
      * 登录接口
      */
     String loginByUsername(LoginVo loginVo);
+
+    //根据用户id查询用户基本信息、菜单权限和按钮权限
+    Map<String, Object> getUserInfo(String username);
 }

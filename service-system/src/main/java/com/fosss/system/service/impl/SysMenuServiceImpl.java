@@ -3,10 +3,14 @@ package com.fosss.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fosss.model.system.SysMenu;
+import com.fosss.model.vo.RouterVo;
 import com.fosss.system.exception.MyException;
 import com.fosss.system.mapper.SysMenuMapper;
+import com.fosss.system.mapper.SysUserRoleMapper;
 import com.fosss.system.service.SysMenuService;
 import com.fosss.system.utils.MenuHelper;
+import com.fosss.system.utils.RouterHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,9 @@ import java.util.List;
 @Transactional
 @Service
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
+
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
     /**
      * 查询菜单列表（树形结构）
@@ -66,23 +73,24 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         //查询所有菜单
         List<SysMenu> sysMenus = baseMapper.selectList(null);
         //判断父菜单或爷爷菜单的状态
-        judgeFatherStatus(id,sysMenus);
+        judgeFatherStatus(id, sysMenus);
         //改菜单及子菜单状态
         updateChildrenStatus(id, status, sysMenus);
 
     }
+
     //判断父菜单或爷爷菜单的状态
     private void judgeFatherStatus(String id, List<SysMenu> sysMenus) {
         SysMenu currentMenu = baseMapper.selectById(id);
         for (SysMenu sysMenu : sysMenus) {
-            if(sysMenu.getId().equals(currentMenu.getParentId())){
-                if(sysMenu.getStatus()==0){
+            if (sysMenu.getId().equals(currentMenu.getParentId())) {
+                if (sysMenu.getStatus() == 0) {
                     //将
                     //抛出异常
-                    throw new MyException(20001,"请先开启上级菜单");
+                    throw new MyException(20001, "请先开启上级菜单");
                 }
                 //递归判断
-                judgeFatherStatus(sysMenu.getId(),sysMenus);
+                judgeFatherStatus(sysMenu.getId(), sysMenus);
             }
         }
     }
@@ -105,6 +113,25 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             }
         }
     }
+
+    //查询该用户的菜单权限
+    @Override
+    public List<RouterVo> getMenuByUsername(String id) {
+        //根据用户id查询其菜单权限,多表联查，直接写sql更加直观方便
+        List<SysMenu> sysMenuList = baseMapper.selectMenuByUserId(id);
+        //将菜单集合转化成树形结构
+        List<SysMenu> sysMenus = MenuHelper.buildTree(sysMenuList);
+        //转化成适配前端的结构
+        List<RouterVo> routerVoList = RouterHelper.buildRouters(sysMenus);
+        return routerVoList;
+    }
+
+    //查询该用户的按钮权限
+    @Override
+    public List<String> getButtonByUsername(String id) {
+        return null;
+    }
+
 }
 
 

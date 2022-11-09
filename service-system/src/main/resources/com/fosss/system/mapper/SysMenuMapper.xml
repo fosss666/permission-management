@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fosss.system.mapper.SysMenuMapper">
+<!--    根据用户id查询其菜单权限  TODO -->
+    <resultMap id="sysMenuMap" type="com.fosss.model.system.SysMenu" autoMapping="true"></resultMap>
+    <select id="selectMenuByUserId" resultMap="sysMenuMap">
 
+    </select>
 </mapper>

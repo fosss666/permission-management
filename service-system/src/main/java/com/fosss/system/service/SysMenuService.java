@@ -2,6 +2,7 @@ package com.fosss.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fosss.model.system.SysMenu;
+import com.fosss.model.vo.RouterVo;
 
 import java.util.List;
 
@@ -26,4 +27,8 @@ public interface SysMenuService extends IService<SysMenu> {
      * 更改菜单状态
      */
     void updateStatus(String id, int status);
+    //查询该用户的菜单权限
+    List<RouterVo> getMenuByUsername(String id);
+    //查询该用户的按钮权限
+    List<String> getButtonByUsername(String id);
 }

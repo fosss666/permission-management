@@ -8,11 +8,13 @@ import com.fosss.model.system.SysRole;
 import com.fosss.model.system.SysUser;
 import com.fosss.model.system.SysUserRole;
 import com.fosss.model.vo.LoginVo;
+import com.fosss.model.vo.RouterVo;
 import com.fosss.model.vo.SysUserQueryVo;
 import com.fosss.system.exception.MyException;
 import com.fosss.system.mapper.SysRoleMapper;
 import com.fosss.system.mapper.SysUserMapper;
 import com.fosss.system.mapper.SysUserRoleMapper;
+import com.fosss.system.service.SysMenuService;
 import com.fosss.system.service.SysUserService;
 import com.fosss.system.utils.JwtUtils;
 import com.fosss.system.utils.MD5Util;
@@ -42,6 +44,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysRoleMapper sysRoleMapper;
     @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
+    @Autowired
+    private SysMenuService sysMenuService;
 
     @Override
     public Page<SysUser> getPageCondition(Long page, Long limit, SysUserQueryVo sysUserQueryVo) {
@@ -135,6 +139,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //都没有问题后，获取token并返回
         String token = JwtUtils.getJwtToken(sysUser.getId(), sysUser.getUsername());
         return token;
+    }
+    //根据用户id查询用户基本信息、菜单权限和按钮权限
+    @Override
+    public Map<String, Object> getUserInfo(String username) {
+        //用map集合封装结果信息
+        Map<String,Object> resultMap=new HashMap<>();
+        resultMap.put("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+        resultMap.put("username",username);
+
+        //查询用户基本信息
+        LambdaQueryWrapper<SysUser> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getUsername,username);
+        SysUser user = baseMapper.selectOne(wrapper);
+
+        //查询该用户的菜单权限
+        List<RouterVo> routerVoList=sysMenuService.getMenuByUsername(user.getId());
+        resultMap.put("routers",routerVoList);
+
+        //查询该用户的按钮权限
+        List<String> permsList=sysMenuService.getButtonByUsername(user.getId());
+        resultMap.put("buttons",permsList);
+        return resultMap;
     }
 
 }
