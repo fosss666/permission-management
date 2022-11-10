@@ -6,9 +6,8 @@ import com.fosss.model.system.SysMenu;
 import com.fosss.model.system.SysRole;
 import com.fosss.model.vo.AssignMenuVo;
 import com.fosss.model.vo.SysRoleQueryVo;
-import com.fosss.system.exception.MyException;
-import com.fosss.system.service.SysRoleService;
 import com.fosss.system.result.R;
+import com.fosss.system.service.SysRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,9 @@ public class SysRoleController {
     @GetMapping("/findAll")
     public R findAll() {
 //        int i=1/0;
-        if (true) {
-            throw new MyException(20000, "自定义异常");
-        }
+//        if (true) {
+//            throw new MyException(20000, "自定义异常");
+//        }
         List<SysRole> sysRoleList = sysRoleService.list();
         return R.ok().data("sysRoleList", sysRoleList);
     }
