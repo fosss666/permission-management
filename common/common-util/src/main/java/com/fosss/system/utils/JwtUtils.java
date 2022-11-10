@@ -54,7 +54,7 @@ public class JwtUtils {
      */
     public static boolean checkToken(HttpServletRequest request) {
         try {
-            String jwtToken = request.getHeader("token");
+            String jwtToken = request.getHeader("X-Token");
             if(StringUtils.isEmpty(jwtToken)) return false;
             Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(jwtToken);
         } catch (Exception e) {
@@ -85,7 +85,7 @@ public class JwtUtils {
     }
 
     public static void main(String[] args) {
-        String token = JwtUtils.getJwtToken("1", "admin");
+        String token = JwtUtils.getJwtToken("3", "wanggang");
         System.out.println("token = " + token);
         String userId = JwtUtils.getUserId(token);
         System.out.println("userId = " + userId);

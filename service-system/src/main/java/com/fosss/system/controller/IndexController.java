@@ -34,7 +34,7 @@ public class IndexController {
     @PostMapping("/login")
     public R login(@RequestBody LoginVo loginVo) {
         String token = sysUserService.loginByUsername(loginVo);
-        return R.ok().data("token", token);
+        return R.ok().data("X-Token", token);
     }
 
     /**
@@ -58,7 +58,7 @@ public class IndexController {
     @GetMapping("info")
     public R loginInfo(HttpServletRequest request) {
         //获取token
-        String token = request.getHeader("token");
+        String token = request.getHeader("X-Token");
         //获取用户id
         String username = JwtUtils.getUserName(token);
         //根据用户名称查询用户基本信息、菜单权限和按钮权限

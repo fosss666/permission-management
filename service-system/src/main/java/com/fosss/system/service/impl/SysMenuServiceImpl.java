@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -129,7 +130,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     //查询该用户的按钮权限
     @Override
     public List<String> getButtonByUsername(String id) {
-        return null;
+        //根据用户id查询菜单
+        List<SysMenu> sysMenus = baseMapper.selectMenuByUserId(id);
+        //封装菜单中的按钮数据并返回
+        List<String> permissionList=new ArrayList<>();
+        for (SysMenu sysMenu : sysMenus) {
+            if(sysMenu.getType()==2){
+                permissionList.add(sysMenu.getPerms());
+            }
+        }
+        return permissionList;
     }
 
 }
