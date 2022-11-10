@@ -34,14 +34,17 @@
       <el-table-column prop="createTime" label="创建时间" width="160"/>
       <el-table-column label="操作" width="180" align="center" fixed="right">
         <template slot-scope="scope">
-          <el-button type="success" v-if="scope.row.type !== 2" icon="el-icon-plus" size="mini" @click="add(scope.row)" title="添加下级节点" :disabled="scope.row.status===0"/>
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="edit(scope.row)" title="修改" :disabled="scope.row.status===0"/>
-          <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeDataById(scope.row.id)" title="删除" :disabled="scope.row.children.length > 0 || scope.row.status===0"/>
+          <el-button type="success" v-if="scope.row.type !== 2" icon="el-icon-plus" size="mini" @click="add(scope.row)"
+                     title="添加下级节点" :disabled="scope.row.status===0 || $hasBP('bnt.sysMenu.add')  === false" />
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="edit(scope.row)" title="修改"
+                     :disabled="scope.row.status===0 || $hasBP('bnt.sysMenu.update')  === false" />
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeDataById(scope.row.id)" title="删除"
+                     :disabled="scope.row.children.length > 0 || scope.row.status===0 || $hasBP('bnt.sysMenu.remove')  === false"/>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="40%" >
+    <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="40%">
       <el-form ref="dataForm" :model="sysMenu" label-width="150px" size="small" style="padding-right: 40px;">
         <el-form-item label="上级部门" v-if="sysMenu.id === ''">
           <el-input v-model="sysMenu.parentName" disabled="true"/>
@@ -67,7 +70,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="排序">
-          <el-input-number v-model="sysMenu.sortValue" controls-position="right" :min="0" />
+          <el-input-number v-model="sysMenu.sortValue" controls-position="right" :min="0"/>
         </el-form-item>
         <el-form-item prop="path">
               <span slot="label">
@@ -76,7 +79,7 @@
                 </el-tooltip>
                 路由地址
               </span>
-          <el-input v-model="sysMenu.path" placeholder="请输入路由地址" />
+          <el-input v-model="sysMenu.path" placeholder="请输入路由地址"/>
         </el-form-item>
         <el-form-item prop="component" v-if="sysMenu.type !== 0">
               <span slot="label">
@@ -85,10 +88,10 @@
                 </el-tooltip>
                 组件路径
               </span>
-          <el-input v-model="sysMenu.component" placeholder="请输入组件路径" />
+          <el-input v-model="sysMenu.component" placeholder="请输入组件路径"/>
         </el-form-item>
         <el-form-item v-if="sysMenu.type === 2">
-          <el-input v-model="sysMenu.perms" placeholder="请输入权限标识" maxlength="100" />
+          <el-input v-model="sysMenu.perms" placeholder="请输入权限标识" maxlength="100"/>
           <span slot="label">
                 <el-tooltip content="控制器中定义的权限字符，如：@PreAuthorize(hasAuthority('bnt.sysRole.list'))" placement="top">
                 <i class="el-icon-question"></i>
@@ -115,6 +118,7 @@
 <script>
 import api from '@/api/system/menu'
 import userApi from "@/api/system/user";
+
 const defaultForm = {
   id: '',
   parentId: '',
@@ -214,11 +218,11 @@ export default {
       api.updateStatus(row.id, row.status).then(res => {
         this.$message.success("状态修改成功")
         this.fetchData(this.page)
-      }).catch(res=>{
+      }).catch(res => {
         // console.log(res)
         // this.$message.error(res.message)
         //捕捉到异常后，撤回更改状态的操作
-        row.status=0;
+        row.status = 0;
       })
     },
     //调用api层获取数据库中的数据
@@ -252,7 +256,7 @@ export default {
     },
 
     //弹出添加或更新的表单
-    add(row){
+    add(row) {
       // debugger
       this.typeDisabled = false
       this.dialogTitle = '添加下级节点'
@@ -260,17 +264,17 @@ export default {
 
       this.sysMenu = Object.assign({}, defaultForm)
       this.sysMenu.id = ''
-      if(row) {
+      if (row) {
         this.sysMenu.parentId = row.id
         this.sysMenu.parentName = row.name
         //this.sysMenu.component = 'ParentView'
-        if(row.type === 0) {
+        if (row.type === 0) {
           this.sysMenu.type = 1
           this.typeDisabled = false
           this.type0Disabled = false
           this.type1Disabled = false
           this.type2Disabled = true
-        } else if(row.type === 1) {
+        } else if (row.type === 1) {
           this.sysMenu.type = 2
           this.typeDisabled = true
         }
@@ -296,7 +300,7 @@ export default {
 
     //添加或更新
     saveOrUpdate() {
-      if(this.sysMenu.type === 0 && this.sysMenu.parentId !== 0) {
+      if (this.sysMenu.type === 0 && this.sysMenu.parentId !== 0) {
         this.sysMenu.component = 'ParentView'
       }
       this.$refs.dataForm.validate(valid => {

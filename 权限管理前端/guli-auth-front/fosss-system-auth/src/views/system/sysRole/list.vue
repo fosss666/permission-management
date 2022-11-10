@@ -58,10 +58,10 @@
           <el-button type="primary" icon="el-icon-edit" size="mini" @click="edit(scope.row.id)" title="修改"
                      :disabled="$hasBP('bnt.sysRole.update')  === false"/>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeDataById(scope.row.id)"
-                     :disabled="$hasBP('bnt.sysRole.update')  === false"
+                     :disabled="$hasBP('bnt.sysRole.remove')  === false"
                      title="删除"/>
           <el-button type="warning" icon="el-icon-baseball" size="mini" @click="showAssignAuth(scope.row)" title="分配权限"
-                     :disabled="$hasBP('bnt.sysRole.update')  === false"/>
+                     :disabled="$hasBP('bnt.sysRole.assignAuth')  === false"/>
         </template>
       </el-table-column>
     </el-table>
