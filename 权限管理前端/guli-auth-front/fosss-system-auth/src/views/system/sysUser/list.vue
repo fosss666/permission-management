@@ -32,7 +32,9 @@
 
     <!-- 工具条 -->
     <div class="tools-div">
-      <el-button type="success" icon="el-icon-plus" size="mini" @click="add">添 加</el-button>
+      <el-button type="success" icon="el-icon-plus" size="mini" @click="add"
+                 :disabled="$hasBP('bnt.sysUser.add')  === false">添 加
+      </el-button>
       <!--      批量删除-->
       <el-button class="btn-add" size="mini" @click="removeUsers()">批量删除</el-button>
     </div>
@@ -71,11 +73,12 @@
 
         <el-table-column label="操作" align="center" fixed="right">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" size="mini" @click="edit(scope.row.id)" title="修改"/>
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeDataById(scope.row.id)"
-                       title="删除"/>
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="edit(scope.row.id)" title="修改"
+                       :disabled="$hasBP('bnt.sysUser.update')  === false"/>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeDataById(scope.row.id)" title="删除"
+                       :disabled="$hasBP('bnt.sysUser.remove')  === false"/>
             <el-button type="warning" icon="el-icon-baseball" size="mini" @click="showAssignRole(scope.row)"
-                       title="分配角色"/>
+                       title="分配角色" :disabled="$hasBP('bnt.sysUser.assignRole')===false"/>
           </template>
         </el-table-column>
       </el-table-column>
@@ -97,7 +100,7 @@
         <el-form-item label="用户名" prop="username">
           <el-input v-model="sysUser.username"/>
         </el-form-item>
-<!--        <el-form-item v-if="!sysUser.id" label="密码" prop="password">-->
+        <!--        <el-form-item v-if="!sysUser.id" label="密码" prop="password">-->
         <el-form-item label="密码" prop="password">
           <el-input v-model="sysUser.password" type="text"/>
         </el-form-item>
@@ -171,7 +174,7 @@ export default {
   },
   methods: {
     //展示分配角色
-    showAssignRole (row) {
+    showAssignRole(row) {
       this.sysUser = row
       this.dialogRoleVisible = true
       userApi.getUserRoles(row.id).then(response => {
@@ -180,15 +183,15 @@ export default {
         // console.log(this.allRoles)
         this.userRoleIds = response.data.map.userRoleIds
         // console.log(this.userRoleIds)
-        this.checkAll = this.userRoleIds.length===this.allRoles.length
-        this.isIndeterminate = this.userRoleIds.length>0 && this.userRoleIds.length<this.allRoles.length
+        this.checkAll = this.userRoleIds.length === this.allRoles.length
+        this.isIndeterminate = this.userRoleIds.length > 0 && this.userRoleIds.length < this.allRoles.length
       })
     },
 
     /*
     全选勾选状态发生改变的监听
     */
-    handleCheckAllChange (value) {// value 当前勾选状态true/false
+    handleCheckAllChange(value) {// value 当前勾选状态true/false
       // 如果当前全选, userRoleIds就是所有角色id的数组, 否则是空数组
       this.userRoleIds = value ? this.allRoles.map(item => item.id) : []
       // 如果当前不是全选也不全不选时, 指定为false
@@ -198,15 +201,15 @@ export default {
     /*
     角色列表选中项发生改变的监听
     */
-    handleCheckedChange (value) {
+    handleCheckedChange(value) {
       const {userRoleIds, allRoles} = this
-      this.checkAll = userRoleIds.length === allRoles.length && allRoles.length>0
-      this.isIndeterminate = userRoleIds.length>0 && userRoleIds.length<allRoles.length
+      this.checkAll = userRoleIds.length === allRoles.length && allRoles.length > 0
+      this.isIndeterminate = userRoleIds.length > 0 && userRoleIds.length < allRoles.length
     },
 
     //分配角色
-    assignRole () {
-      userApi.doAssignRole(this.sysUser.id,this.userRoleIds).then(response => {
+    assignRole() {
+      userApi.doAssignRole(this.sysUser.id, this.userRoleIds).then(response => {
         this.$message.success('分配角色成功')
         this.dialogRoleVisible = false
         this.fetchData(this.page)

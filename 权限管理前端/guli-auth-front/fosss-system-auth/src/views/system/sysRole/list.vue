@@ -23,7 +23,9 @@
       <!-- 添加角色-->
       <!-- 工具条 -->
       <div class="tools-div">
-        <el-button type="success" icon="el-icon-plus" size="mini" @click="add" :disabled="$hasBP('bnt.sysRole.add')  === false">添 加</el-button>
+        <el-button type="success" icon="el-icon-plus" size="mini" @click="add"
+                   :disabled="$hasBP('bnt.sysRole.add')  === false">添 加
+        </el-button>
         <!--      批量删除-->
         <el-button class="btn-add" size="mini" @click="removeRoles()">批量删除</el-button>
       </div>
@@ -53,10 +55,13 @@
       <el-table-column prop="createTime" label="创建时间" width="160"/>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="edit(scope.row.id)" title="修改"/>
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="edit(scope.row.id)" title="修改"
+                     :disabled="$hasBP('bnt.sysRole.update')  === false"/>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeDataById(scope.row.id)"
+                     :disabled="$hasBP('bnt.sysRole.update')  === false"
                      title="删除"/>
-          <el-button type="warning" icon="el-icon-baseball" size="mini" @click="showAssignAuth(scope.row)" title="分配权限"/>
+          <el-button type="warning" icon="el-icon-baseball" size="mini" @click="showAssignAuth(scope.row)" title="分配权限"
+                     :disabled="$hasBP('bnt.sysRole.update')  === false"/>
         </template>
       </el-table-column>
     </el-table>
@@ -113,16 +118,16 @@ export default {
   methods: {
     //跳转到角色分配路由
     showAssignAuth(row) {
-      this.$router.push('/system/assignAuth?id='+row.id+'&roleName='+row.roleName);
+      this.$router.push('/system/assignAuth?id=' + row.id + '&roleName=' + row.roleName);
     },
     //被选中的复选框
-    handleSelectionChange(selection){
+    handleSelectionChange(selection) {
       // console.log(selection)
-      this.selectValue=selection
+      this.selectValue = selection
     },
     //批量删除
     removeRoles() {
-      if(this.selectValue.length>0){
+      if (this.selectValue.length > 0) {
         //弹出提示框
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -130,9 +135,9 @@ export default {
           type: 'warning'
         }).then(() => {
           //封装被选中的id数组
-          var ids=[]
-          for(let i=0;i<this.selectValue.length;i++){
-            ids[i]=this.selectValue[i].id
+          var ids = []
+          for (let i = 0; i < this.selectValue.length; i++) {
+            ids[i] = this.selectValue[i].id
           }
           // console.log(ids)
           //调用删除接口
