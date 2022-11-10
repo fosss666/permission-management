@@ -84,12 +84,12 @@ public class JwtUtils {
         return (String)claims.get("nickname");
     }
 
-//    public static void main(String[] args) {
-//        String token = JwtUtils.getJwtToken("1001", "admin");
-//        System.out.println("token = " + token);
-//        String userId = JwtUtils.getUserId(token);
-//        System.out.println("userId = " + userId);
-//        String userName = JwtUtils.getUserName(token);
-//        System.out.println("userName = " + userName);
-//    }
+    public static void main(String[] args) {
+        String token = JwtUtils.getJwtToken("1", "admin");
+        System.out.println("token = " + token);
+        String userId = JwtUtils.getUserId(token);
+        System.out.println("userId = " + userId);
+        String userName = JwtUtils.getUserName(token);
+        System.out.println("userName = " + userName);
+    }
 }
