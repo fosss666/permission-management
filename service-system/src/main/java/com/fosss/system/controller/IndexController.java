@@ -34,7 +34,7 @@ public class IndexController {
     @PostMapping("/login")
     public R login(@RequestBody LoginVo loginVo) {
         String token = sysUserService.loginByUsername(loginVo);
-        return R.ok().data("X-Token", token);
+        return R.ok().data("token", token);
     }
 
     /**
@@ -69,6 +69,7 @@ public class IndexController {
     /**
      * 退出登录
      */
+    @ApiOperation("退出登录")
     @PostMapping("/logout")
     public R logout() {
         return R.ok();

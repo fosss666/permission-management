@@ -253,7 +253,7 @@ export default {
 
     //弹出添加或更新的表单
     add(row){
-      debugger
+      // debugger
       this.typeDisabled = false
       this.dialogTitle = '添加下级节点'
       this.dialogVisible = true

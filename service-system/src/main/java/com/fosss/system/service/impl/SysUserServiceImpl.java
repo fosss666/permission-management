@@ -146,12 +146,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //用map集合封装结果信息
         Map<String,Object> resultMap=new HashMap<>();
         resultMap.put("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        resultMap.put("username",username);
 
         //查询用户基本信息
         LambdaQueryWrapper<SysUser> wrapper=new LambdaQueryWrapper<>();
         wrapper.eq(SysUser::getUsername,username);
         SysUser user = baseMapper.selectOne(wrapper);
+        resultMap.put("name",user.getName());
 
         //查询该用户的菜单权限
         List<RouterVo> routerVoList=sysMenuService.getMenuByUsername(user.getId());
