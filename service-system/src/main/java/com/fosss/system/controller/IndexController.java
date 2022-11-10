@@ -58,7 +58,7 @@ public class IndexController {
     @GetMapping("info")
     public R loginInfo(HttpServletRequest request) {
         //获取token
-        String token = request.getHeader("X-Token");
+        String token = request.getHeader("token");
         //获取用户id
         String username = JwtUtils.getUserName(token);
         //根据用户名称查询用户基本信息、菜单权限和按钮权限
