@@ -6,7 +6,9 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    buttons: [], // 新增
+    menus: '' //新增
   }
 }
 
@@ -24,6 +26,14 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  // 新增
+  SET_BUTTONS: (state, buttons) => {
+    state.buttons = buttons
+  },
+  // 新增
+  SET_MENUS: (state, menus) => {
+    state.menus = menus
   }
 }
 
@@ -47,7 +57,7 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        const { data } = response
+        const { data } = response.map //todo
 
         if (!data) {
           return reject('Verification failed, please Login again.')
@@ -57,6 +67,11 @@ const actions = {
 
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
+
+        //新增
+        commit("SET_BUTTONS", data.buttons)
+        //新增
+        commit("SET_MENUS", data.routers)
         resolve(data)
       }).catch(error => {
         reject(error)

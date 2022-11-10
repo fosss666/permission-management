@@ -23,7 +23,7 @@
       <!-- 添加角色-->
       <!-- 工具条 -->
       <div class="tools-div">
-        <el-button type="success" icon="el-icon-plus" size="mini" @click="add">添 加</el-button>
+        <el-button type="success" icon="el-icon-plus" size="mini" @click="add" :disabled="$hasBP('bnt.sysRole.add')  === false">添 加</el-button>
         <!--      批量删除-->
         <el-button class="btn-add" size="mini" @click="removeRoles()">批量删除</el-button>
       </div>
