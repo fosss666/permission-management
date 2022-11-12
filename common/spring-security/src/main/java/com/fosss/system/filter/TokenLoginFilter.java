@@ -1,11 +1,13 @@
 package com.fosss.system.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fosss.model.vo.LoginVo;
 import com.fosss.system.custom.CustomUser;
 import com.fosss.system.result.R;
 import com.fosss.system.result.ResponseUtil;
 import com.fosss.system.utils.JwtUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,12 +28,15 @@ import java.util.Map;
  */
 public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
 
+    private RedisTemplate redisTemplate;
+
     //指定登录接口及请求方式
-    public TokenLoginFilter(AuthenticationManager authenticationManager) {
+    public TokenLoginFilter(AuthenticationManager authenticationManager, RedisTemplate redisTemplate) {
         this.setAuthenticationManager(authenticationManager);
         this.setPostOnly(false);
         //指定登录接口及提交方式，可以指定任意路径
-        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/admin/system/index/login","POST"));
+        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/admin/system/index/login", "POST"));
+        this.redisTemplate = redisTemplate;
     }
 
     //登录校验
@@ -55,9 +60,12 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         CustomUser customUser = (CustomUser) auth.getPrincipal();
         String token = JwtUtils.getJwtToken(customUser.getSysUser().getId(), customUser.getSysUser().getUsername());
 
+        //保存权限数据
+        redisTemplate.opsForValue().set(customUser.getUsername(), JSON.toJSONString(customUser.getAuthorities()));
+
         Map<String, Object> map = new HashMap<>();
         map.put("token", token);
-        ResponseUtil.out(response, R.ok().data("map",map));
+        ResponseUtil.out(response, R.ok().data("map", map));
     }
 
     //登录失败调用
@@ -65,7 +73,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException e) throws IOException, ServletException {
 
-        if(e.getCause() instanceof RuntimeException) {
+        if (e.getCause() instanceof RuntimeException) {
             ResponseUtil.out(response, R.error().message(e.getMessage()));
         } else {
             ResponseUtil.out(response, R.error().message("用户名或密码错误"));
