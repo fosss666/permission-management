@@ -125,42 +125,54 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public String loginByUsername(LoginVo loginVo) {
         //先判断是否存在当前用户及密码是否正确
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysUser::getUsername,loginVo.getUsername())
+        wrapper.eq(SysUser::getUsername, loginVo.getUsername())
                 .eq(SysUser::getPassword, MD5Util.convertMD5(loginVo.getPassword()));
         SysUser sysUser = baseMapper.selectOne(wrapper);
-        if(sysUser==null){
-            throw new MyException(20001,"用户名或密码错误");
+        if (sysUser == null) {
+            throw new MyException(20001, "用户名或密码错误");
         }
         //用户存在且密码正确时，判断用户状态
-        if(sysUser.getStatus()==0){
-            throw new MyException(20001,"该用户已被禁用，请联系管理员");
+        if (sysUser.getStatus() == 0) {
+            throw new MyException(20001, "该用户已被禁用，请联系管理员");
         }
 
         //都没有问题后，获取token并返回
         String token = JwtUtils.getJwtToken(sysUser.getId(), sysUser.getUsername());
         return token;
     }
+
     //根据用户id查询用户基本信息、菜单权限和按钮权限
     @Override
     public Map<String, Object> getUserInfo(String username) {
         //用map集合封装结果信息
-        Map<String,Object> resultMap=new HashMap<>();
-        resultMap.put("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
 
         //查询用户基本信息
-        LambdaQueryWrapper<SysUser> wrapper=new LambdaQueryWrapper<>();
-        wrapper.eq(SysUser::getUsername,username);
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getUsername, username);
         SysUser user = baseMapper.selectOne(wrapper);
-        resultMap.put("name",user.getName());
+        resultMap.put("name", user.getName());
 
         //查询该用户的菜单权限
-        List<RouterVo> routerVoList=sysMenuService.getMenuByUsername(user.getId());
-        resultMap.put("routers",routerVoList);
+        List<RouterVo> routerVoList = sysMenuService.getMenuByUsername(user.getId());
+        resultMap.put("routers", routerVoList);
 
         //查询该用户的按钮权限
-        List<String> permsList=sysMenuService.getButtonByUsername(user.getId());
-        resultMap.put("buttons",permsList);
+        List<String> permsList = sysMenuService.getButtonByUsername(user.getId());
+        resultMap.put("buttons", permsList);
         return resultMap;
+    }
+
+    /**
+     * 根据用户名获取用户基本信息
+     */
+    @Override
+    public SysUser getUserInfoByUsername(String username) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getUsername, username);
+        SysUser sysUser = baseMapper.selectOne(wrapper);
+        return sysUser;
     }
 
 }

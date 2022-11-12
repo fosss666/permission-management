@@ -28,11 +28,13 @@ public interface SysUserService extends IService<SysUser> {
      * 1.查询所有角色和当前用户已经分配的角色
      */
     Map<String, Object> getUserRoles(String userId);
+
     /**
      * 给用户分配角色
      * 2.删除当前用户的角色，添加新的角色来实现更改用户的角色
      */
     void doAssignRole(String userId, List<String> userRoleList);
+
     /**
      * 登录接口
      */
@@ -40,4 +42,9 @@ public interface SysUserService extends IService<SysUser> {
 
     //根据用户id查询用户基本信息、菜单权限和按钮权限
     Map<String, Object> getUserInfo(String username);
+
+    /**
+     * 根据用户名获取用户基本信息
+     */
+    SysUser getUserInfoByUsername(String username);
 }

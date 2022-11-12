@@ -4,6 +4,9 @@ import com.fosss.system.utils.MD5Util;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+/**
+ * 自定义加密方式
+ */
 @Component
 public class CustomMd5PasswordEncoder implements PasswordEncoder {
     @Override
