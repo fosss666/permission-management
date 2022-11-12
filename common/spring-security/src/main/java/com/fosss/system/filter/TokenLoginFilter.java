@@ -20,8 +20,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 自定义登录过滤器
@@ -63,9 +61,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         //保存权限数据
         redisTemplate.opsForValue().set(customUser.getUsername(), JSON.toJSONString(customUser.getAuthorities()));
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("token", token);
-        ResponseUtil.out(response, R.ok().data("map", map));
+        ResponseUtil.out(response, R.ok().data("token", token));
     }
 
     //登录失败调用
