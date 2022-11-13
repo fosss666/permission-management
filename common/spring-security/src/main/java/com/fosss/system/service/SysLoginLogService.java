@@ -1,5 +1,9 @@
 package com.fosss.system.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fosss.model.system.SysLoginLog;
+import com.fosss.model.vo.SysLoginLogQueryVo;
+
 /**
  * 异步调用日志服务
  */
@@ -15,4 +19,6 @@ public interface SysLoginLogService {
      * @return
      */
     void recordLoginLog(String username, Integer status, String ipaddr, String message);
+    //条件分页查询登录日志
+    IPage<SysLoginLog> selectPage(long page, long limit, SysLoginLogQueryVo sysLoginLogQueryVo);
 }
