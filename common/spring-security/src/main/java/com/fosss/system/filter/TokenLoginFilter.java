@@ -6,6 +6,8 @@ import com.fosss.model.vo.LoginVo;
 import com.fosss.system.custom.CustomUser;
 import com.fosss.system.result.R;
 import com.fosss.system.result.ResponseUtil;
+import com.fosss.system.service.SysLoginLogService;
+import com.fosss.system.utils.IpUtil;
 import com.fosss.system.utils.JwtUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,14 +29,19 @@ import java.io.IOException;
 public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private RedisTemplate redisTemplate;
+    private SysLoginLogService sysLoginLogService;
 
     //指定登录接口及请求方式
-    public TokenLoginFilter(AuthenticationManager authenticationManager, RedisTemplate redisTemplate) {
+    public TokenLoginFilter(AuthenticationManager authenticationManager,
+                            RedisTemplate redisTemplate,
+                            SysLoginLogService sysLoginLogService
+    ) {
         this.setAuthenticationManager(authenticationManager);
         this.setPostOnly(false);
         //指定登录接口及提交方式，可以指定任意路径
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/admin/system/index/login", "POST"));
         this.redisTemplate = redisTemplate;
+        this.sysLoginLogService=sysLoginLogService;
     }
 
     //登录校验
@@ -60,6 +67,9 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         //保存权限数据
         redisTemplate.opsForValue().set(customUser.getUsername(), JSON.toJSONString(customUser.getAuthorities()));
+
+        //记录日志
+        sysLoginLogService.recordLoginLog(customUser.getUsername(),1, IpUtil.getIpAddress(request),"登录成功");
 
         ResponseUtil.out(response, R.ok().data("token", token));
     }
