@@ -6,6 +6,9 @@ import com.fosss.model.system.SysMenu;
 import com.fosss.model.system.SysRole;
 import com.fosss.model.vo.AssignMenuVo;
 import com.fosss.model.vo.SysRoleQueryVo;
+import com.fosss.system.annotation.Log;
+import com.fosss.system.enums.BusinessType;
+import com.fosss.system.enums.OperatorType;
 import com.fosss.system.result.R;
 import com.fosss.system.service.SysRoleService;
 import io.swagger.annotations.Api;
@@ -26,6 +29,7 @@ public class SysRoleController {
     /**
      * 查询所有角色
      */
+    @Log(title = "查询所有角色",businessType = BusinessType.OTHER,operatorType = OperatorType.OTHER)
     @ApiOperation("查询所有角色")
     @GetMapping("/findAll")
     public R findAll() {
@@ -40,6 +44,7 @@ public class SysRoleController {
     /**
      * 逻辑删除
      */
+    @Log(title = "角色管理",businessType = BusinessType.DELETE)
     @ApiOperation("逻辑删除")
     @DeleteMapping("/{id}")
     public R delete(@PathVariable String id) {
@@ -60,6 +65,7 @@ public class SysRoleController {
     /**
      * 添加角色
      */
+    @Log(title = "角色管理",businessType = BusinessType.INSERT)
     @ApiOperation("添加角色")
     @PostMapping
     public R addRole(@RequestBody SysRole sysRole) {
@@ -80,6 +86,7 @@ public class SysRoleController {
     /**
      * 修改角色
      */
+    @Log(title = "角色管理",businessType = BusinessType.UPDATE)
     @ApiOperation("修改角色")
     @PutMapping()
     public R updateRole(@RequestBody SysRole sysRole) {
@@ -90,6 +97,7 @@ public class SysRoleController {
     /**
      * 批量删除
      */
+    @Log(title = "角色管理",businessType = BusinessType.DELETE)
     @ApiOperation("批量删除")
     @DeleteMapping
     public R deleteRoles(@RequestBody List<String> ids) {
@@ -110,6 +118,7 @@ public class SysRoleController {
     /**
      * 根据角色id给角色分配菜单，先删除原有分配，再添加现有分配
      */
+    @Log(title = "角色管理",businessType = BusinessType.ASSGIN)
     @ApiOperation("给角色分配菜单")
     @PostMapping("/doAssign")
     public R doAssignMenu(@RequestBody AssignMenuVo assignMenuVo){

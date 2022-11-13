@@ -4,8 +4,10 @@ package com.fosss.system.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fosss.model.system.SysUser;
 import com.fosss.model.vo.SysUserQueryVo;
-import com.fosss.system.service.SysUserService;
+import com.fosss.system.annotation.Log;
+import com.fosss.system.enums.BusinessType;
 import com.fosss.system.result.R;
+import com.fosss.system.service.SysUserService;
 import com.fosss.system.utils.MD5Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,6 +46,7 @@ public class SysUserController {
     /**
      * 添加用户
      */
+    @Log(title = "用户管理",businessType = BusinessType.INSERT)
     @ApiOperation("添加用户")
     @PostMapping
     public R addUser(@RequestBody SysUser sysUser) {
@@ -70,6 +73,7 @@ public class SysUserController {
     /**
      * 修改用户
      */
+    @Log(title = "用户管理",businessType = BusinessType.UPDATE)
     @ApiOperation("修改用户")
     @PutMapping
     public R updateUser(@RequestBody SysUser sysUser) {
@@ -82,6 +86,7 @@ public class SysUserController {
     /**
      * 根据id删除用户
      */
+    @Log(title = "用户管理",businessType = BusinessType.DELETE)
     @ApiOperation("根据id删除用户")
     @DeleteMapping("{id}")
     public R removeById(@PathVariable String id) {
@@ -92,6 +97,7 @@ public class SysUserController {
     /**
      * 批量删除
      */
+    @Log(title = "用户管理",businessType = BusinessType.DELETE)
     @ApiOperation("批量删除")
     @DeleteMapping
     public R removeUsers(@RequestBody List<String> ids) {
@@ -102,6 +108,7 @@ public class SysUserController {
     /**
      * 更改用户状态
      */
+    @Log(title = "用户管理",businessType = BusinessType.STATUS)
     @ApiOperation("更改用户状态")
     @PutMapping("/{id}/{status}")
     public R updateStatus(@PathVariable String id, @PathVariable int status) {
@@ -124,6 +131,7 @@ public class SysUserController {
      * 给用户分配角色
      * 2.删除当前用户的角色，添加新的角色来实现更改用户的角色
      */
+    @Log(title = "用户管理",businessType = BusinessType.ASSGIN)
     @ApiOperation("删除当前用户的角色，添加新的角色来实现更改用户的角色")
     @PostMapping("/doAssign/{userId}") //AssignRoleVo可以直接用这个类来接收
     public R doAssignRole(@PathVariable String userId, @RequestBody List<String> userRoleList) {

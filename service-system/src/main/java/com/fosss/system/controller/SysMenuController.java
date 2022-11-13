@@ -2,8 +2,10 @@ package com.fosss.system.controller;
 
 
 import com.fosss.model.system.SysMenu;
-import com.fosss.system.service.SysMenuService;
+import com.fosss.system.annotation.Log;
+import com.fosss.system.enums.BusinessType;
 import com.fosss.system.result.R;
+import com.fosss.system.service.SysMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,7 @@ public class SysMenuController {
     /**
      * 添加菜单
      */
+    @Log(title = "菜单管理",businessType = BusinessType.INSERT)
     @ApiOperation("添加菜单")
     @PostMapping
     public R addMenu(@RequestBody SysMenu sysMenu) {
@@ -51,6 +54,7 @@ public class SysMenuController {
     /**
      * 删除菜单
      */
+    @Log(title = "菜单管理",businessType = BusinessType.DELETE)
     @ApiOperation("删除菜单")
     @DeleteMapping("{id}")
     public R removeMenu(@PathVariable String id) {
@@ -71,6 +75,7 @@ public class SysMenuController {
     /**
      * 修改菜单
      */
+    @Log(title = "菜单管理",businessType = BusinessType.UPDATE)
     @ApiOperation("修改菜单")
     @PutMapping
     public R updateMenu(@RequestBody SysMenu sysMenu) {
@@ -81,6 +86,7 @@ public class SysMenuController {
     /**
      * 更改菜单状态
      */
+    @Log(title = "菜单管理",businessType = BusinessType.STATUS)
     @ApiOperation("更改菜单状态")
     @PutMapping("/{id}/{status}")
     public R updateStatus(@PathVariable String id, @PathVariable int status) {
