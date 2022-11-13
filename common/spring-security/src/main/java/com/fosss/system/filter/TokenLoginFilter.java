@@ -79,6 +79,8 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException e) throws IOException, ServletException {
 
+        //记录日志
+        sysLoginLogService.recordLoginLog("未知用户",0,IpUtil.getIpAddress(request),"登录失败");
         if (e.getCause() instanceof RuntimeException) {
             ResponseUtil.out(response, R.error().message(e.getMessage()));
         } else {
